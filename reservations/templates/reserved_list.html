@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% extends 'base.html' %}
+    {% block content %}
+        <div class="list-group">
+            <h3><span>List of reservations:</span></h3>
+            <div class="list-group-flush ">
+                    <ul>
+                        {% for r in reserv %}
+                        <h4>{{r.room.name}}  |  {{ r.date }}</h4><button type="submit" class="btn btn-light btn-sm"><a href="{% url 'cancel_reservation' r.pk%}">Cancel</a></button>
+                        {% endfor %}
+                    </ul>
+            </div>
+        </div>
+    {% endblock %}
+</html>

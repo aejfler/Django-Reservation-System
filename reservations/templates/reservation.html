@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% extends 'base.html' %}
+    {% block content %}
+        <h2>Room to be booked: {{rooms.name}}</h2>
+        <form action="" method="POST">
+            {% csrf_token%}
+            <div class="form-group">
+                <div class="form-control">
+                    {{form.as_p}}
+                    <button type="submit" class="btn btn-light btn-sm">Book</button>
+                    <button type="submit" class="btn btn-light btn-sm">Cancel</button>
+                </div>
+            </div>
+    </form>
+    {% if error %}
+    <!-- Form error -->
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{error}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <!-- Form error -->
+    {% endif %}
+    <!-- All bookings -->
+      {% if room.reserv %}
+        <h3>Bookings</h3>
+        <ul class="list-group">
+            {% for room in room.reservation_dated %}
+              <li class="list-group-item">
+                <h4>{{ room.room.name }}</h4>
+                <h4>{{ room.date }}</h4>
+                <p>{{ room.comment }}</p>
+                <button type="submit" class="btn btn-light btn-sm"><a href="{% url 'cancel_reservation' room.pk %}">Cancel</a></button>
+              </li>
+            {% endfor %}
+        </ul>
+      {% endif %}
+<!-- All bookings -->
+
+    {% endblock %}
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% extends 'base.html' %}
+    {% block content%}
+
+<div class="card-body">
+    <p>Cancel booking</p>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p>Are you sure you want to cancel the booking
+        of the room <b>{{ reservations.room.name }}</b>
+        for <b>{{ reservations.date }}</b>?</p>
+
+        <div class="form_submit">
+            <button type="submit" class="btn btn-secondary btn-lg">Yes, cancel the booking</button>
+            <a href="{% url 'rooms' %}" class="btn btn-secondary btn-lg">No, keep it</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+</html>

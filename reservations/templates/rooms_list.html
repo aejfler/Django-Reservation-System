@@ -1,0 +1,175 @@
+{#<!DOCTYPE html>#}
+{#<html>#}
+{#    {% extends 'base.html' %}#}
+{#    {% load static %}#}
+{#  {% block content %}#}
+{#    <!--    filtering form-->#}
+{#<div class="filter_bar">#}
+{#{% include 'searchDIV.html' %}#}
+{#</div>#}
+{#   <h5> Available conference rooms: </h5>#}
+{#    <table class="table">#}
+{#    <thead class="thead-light">#}
+{#        <tr class="d-flex">#}
+{#              <th scope="col" class="col-1">#</th>#}
+{#              <th scope="col" class="col-2">Name</th>#}
+{#              <th scope="col" class="col-1">Capacity</th>#}
+{#              <th scope="col" class="col-2">Availability</th>#}
+{#              <th scope="col" class="col-5" colspan="4">Projector availability</th>#}
+{#            </tr>#}
+{#    </thead>#}
+{# <tbody class="content-wrap">#}
+{#       {% for room in rooms %}#}
+{#        <tr class="d-flex ">#}
+{#             <th scope="row" class="col-1">{{ room.id }}</th>#}
+{#            <td class="col-2">Name:<a href="{% url 'room_detail' room.pk%}">{{room.name}}</a> </th></td>#}
+{#            <td class="col-2"> Capacity: {{room.capacity}}</td>#}
+{##}
+{#          {% if room.reserved %}#}
+{#            <td class="col-2" style="color:red;">Reserved</td>#}
+{#          {% else %}#}
+{#            <td class="col-2" style="color:green;">Available</td>#}
+{##}
+{#          {% endif %}#}
+{##}
+{#            {% if room.projector_availability %}#}
+{#            <td class="col-2"><img src="{% static 'neXt/check_circle.svg' %}" alt="Check mark"></td>#}
+{#            {%else%}#}
+{#            <td class="col-2"> </td>#}
+{#            {% endif %}#}
+{##}
+{#            <td class="col-2">#}
+{#            <button type="submit" class="btn btn-light btn-sm"><a href="{% url 'reservation' room.pk %}">Book</a></button>#}
+{#            <button type="submit" class="btn btn-light btn-sm"><a href="{% url 'delete_room' room.pk %}">Delete</a></button>#}
+{#            <button type="submit" class="btn btn-light btn-sm"><a href="{% url 'modify_room' room.pk %}">Edit</a></button>#}
+{#            </td>#}
+{#        </tr>#}
+{#        {% empty %}#}
+{#            <tr><td colspan="6">No rooms available</td></tr>#}
+{#        {% endfor %}#}
+{##}
+{#        <td> Booked on:#}
+{#        {% for r in room.reservations_dated %}#}
+{#        <div >#}
+{#            {{room.name}}#}
+{#            {{ r.date }}#}
+{#        </div>#}
+{#        {% endfor %}#}
+{#        </td>#}
+{#    </tbody>#}
+{#    </table>#}
+{#    {% endblock content%}#}
+{#</html>#}
+{##}
+<!DOCTYPE html>
+<html>
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+    <!--    filtering form-->
+    <div class="filter_bar">
+
+        <!-- Form -->
+        <h3>Search</h3>
+        {% include 'searchDIV.html' %}
+
+        {#<div class="card">#}
+        {#  <div class="card-body">#}
+        {#    <form action="/search" method="GET">#}
+        {#      {% csrf_token %}#}
+        {#      <div class="form-group">#}
+        {#        <label for="room-name">Room name</label>#}
+        {#        <input type="text" class="form-control" id="room-name" aria-describedby="room-name-help" placeholder="Room name" name="room-name">#}
+        {#      </div>#}
+        {#      <div class="form-group">#}
+        {#        <label for="capacity">Minimum room capacity</label>#}
+        {#        <input type="number" step="1" class="form-control" id="capacity" placeholder="10" name="capacity">#}
+        {#      </div>#}
+        {##}
+        {#      <div class="form-check">#}
+        {#        <input type="checkbox" class="form-check-input" name="projector" id="projector">#}
+        {#        <label class="form-check-label" for="projector">Projector availability</label>#}
+        {#      </div>#}
+        {#      <button type="submit" class="btn btn-primary">Search</button>#}
+        {#    </form>#}
+        {#  </div>#}
+        {#</div>#}
+        <!-- Form -->
+    </div>
+    <table class="table">
+        <thead>
+        <tr class="d-flex">
+            <th scope="col" class="col-1">#</th>
+            <th scope="col" class="col-2">Name</th>
+            <th scope="col" class="col-1">Capacity</th>
+            <th scope="col" class="col-2">Availability</th>
+            <th scope="col" class="col-2">Projector availability</th>
+            <th scope="col" class="col-2">Booked on</th>
+            <th scope="col" class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for room in rooms %}
+            <tr class="d-flex">
+                <th scope="row" class="col-1">{{ room.id }}</th>
+                <td class="col-2">
+                    <a href="/room/{{ room.id }}/">{{ room.name }}</a>
+                </td>
+                <td class="col-1">{{ room.capacity }}</td>
+                {% if room.reserved %}
+                    <td class="col-2" style="color:red;">Booked</td>
+                {% else %}
+                    <td class="col-2" style="color:green;">Available</td>
+                {% endif %}
+                {% if room.projector_availability %}
+                    <td class="col-2" style="color:green;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-check-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                        </svg>
+                    </td>
+                {% else %}
+                    <td class="col-2" style="color:red;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-x-square" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </td>
+                {% endif %}
+
+                <td class="col-2">
+                    {% for r in room.reservations_dated %}
+                        {% if room.reservations_dated %}
+                            <ul>
+                                <li>
+                                    {{ r.date }}
+                                </li>
+                            </ul>
+
+                        {% endif %}
+                    {% endfor %}
+                <td class="col-2">
+                    <button type="submit" class="btn btn-light btn-sm"><a
+                            href="{% url 'reservation' room.pk %}">Book</a></button>
+                    <button type="submit" class="btn btn-light btn-sm"><a
+                            href="{% url 'delete_room' room.pk %}">Delete</a></button>
+                    <button type="submit" class="btn btn-light btn-sm"><a
+                            href="{% url 'modify_room' room.pk %}">Edit</a></button>
+                </td>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">No rooms available</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <!-- table -->
+    <br>
+
+
+{% endblock %}
+</html>

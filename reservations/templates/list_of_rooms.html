@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% extends 'base.html' %}
+    {% block content %}
+    <form action="" method="GET">
+    <hr>
+<table class="table">
+    <thead class="thead-light">
+        <tr class="d-flex p-2">
+            <th scope="col" class="col-1">#</th>
+            <th scope="col" class="col-2">Name</th>
+            <th scope="col" class="col-3">Capacity</th>
+            <th scope="col" class="col-4">Availability</th>
+            <th scope="col" class="col-5" colspan="4">Projector availability</th>
+        </tr>
+    </thead>
+    <tbody>
+    <hr>
+       {% for room in rooms %}
+        <tr class="d-flex ">
+            <th scope="row" class="col-1">{{ room.id }}</th>
+            <td class="col-2">Name:<a href="{% url 'room_detail' room.pk%}">{{room.name}}</a> </th></td>
+            <td class="col-3"> Capacity: {{room.capacity}}</td>
+          {% if room.reserved %}}
+            <td class="col-4" style="color:red;">Reserved</td>
+          {% else %}
+            <td class="col-4" style="color:green;">Available</td>
+          {% endif %}
+
+          {% if room.projector_availability %}
+            <td class="col-3" style="color:green;">&#9745;</td>
+          {% else %}
+            <td class="col-3" style="color:red;">&#9746;</td>
+          {% endif %}
+        </tr>
+    </tbody>
+        {% endfor %}
+
+</table>
+    {% endblock %}
+</form>
+</html>
